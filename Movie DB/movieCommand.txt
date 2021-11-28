@@ -1,1 +1,33 @@
+mongo
 
+use movie_application
+
+mongoimport --db movie-application --drop --collection movies --file D:/MOCK_DATA.json --jsonArray
+
+db.movies.find({"movie_name": {$eq : "Don"}}).pretty()
+
+db.movies.find({"movie_name": {$ne : "Don"}}).pretty()
+
+db.movies.find({"budget": {$gt : 10000}}).pretty()
+
+db.movies.find({"budget": {$gte : 10000}}).pretty()
+
+db.movies.find({"budget": {$lt : 10000}}).pretty()
+
+db.movies.find({"budget": {$lte : 10000}}).pretty()
+
+db.movies.find({$and: [{"production_year": {$gt: 2000}},{"budget": {$gt: 10000}}]}).pretty()
+
+db.movies.find({$or: [{"production_year": {$gt: 2000}},{"budget": {$gt: 10000}}]}).pretty()
+
+db.movies.find({$nor: [{"production_year": {$gt: 2000}},{"budget": {$gt: 10000}}]}).pretty()
+
+db.movies.find({$or: [{"production_year":{$not:{$gt: 2000}}},{"budget": {$not:{$gt: 10000}}}]}).pretty()
+
+db.movies.find({"production_year": {$gte: 2000, $lte:2010}}).pretty()
+
+db.movies.find({}).sort({production_year:-1, movie_name:-1}).pretty()
+
+db.movies.find({}).sort({production_year:-1, movie_name:-1}).skip(10).limit(5).pretty()
+
+db.movies.find({}).sort({production_year:-1, movie_name:-1}).pretty().limit(10).forEach(function(doc){db.movies.update({_id: doc._id}, {$unset:{"movie_genre": ""}})})
